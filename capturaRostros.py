@@ -42,7 +42,7 @@ class capturaRostros:
                     print(self.count)
                 cv2.imshow('frame',frame)
                 k = cv2.waitKey(30)
-                if k == 27 or self.count >= 300:
+                if k == 27 or self.count >= 1000:
                     break
 
             self.cap.release()

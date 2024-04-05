@@ -1,5 +1,8 @@
 import cv2
 import os
+import face_recognition as fr
+import numpy as np
+import imutils
 
 class ReconocimientoFacial:
     def __init__(self, videoPath):
@@ -24,6 +27,7 @@ class ReconocimientoFacial:
             if ret == False:
                 break
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             auxFrame = gray.copy()
 
             faces = self.faceClassif.detectMultiScale(gray, 1.3, 5)
@@ -35,7 +39,7 @@ class ReconocimientoFacial:
 
                 cv2.putText(frame, '{}'.format(result), (x, y-5), 1, 1.3, (255, 255, 0), 1, cv2.LINE_AA)
 
-                if result[1] <= 80:  # Adjust threshold as needed for LBPH
+                if result[1] <= 50:  # Adjust threshold as needed for LBPH
                     cv2.putText(frame, '{}'.format(self.imagePaths[result[0]]), (x, y-25), 2, 1.1, (0, 255, 0), 1, cv2.LINE_AA)
                     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 else:
