@@ -12,7 +12,6 @@ class FaceRecognition:
         self.classes = []
         self.lista = os.listdir(self.path)
         self.comp1 = 100
-        self.colors = [[],[]]
 
     def load_images(self):
         for lis in self.lista:
@@ -43,19 +42,12 @@ class FaceRecognition:
                 h.writelines(f'\n{nombre},{fecha},{hora}')
                 print(info)
 
-    def asignarColores(self):
-        for i in range(len(self.classes)):
-            r = rng.randrange(0, 255, 50)
-            g = rng.randrange(0, 255, 50)
-            b = rng.randrange(0, 255, 50)
-            self.colors.append([r, g, b])
-            
-    
     def run(self):
         self.load_images()
         rostroscod = self.codRostros()
-        self.asignarColores()
         cap = cv2.VideoCapture(0)
+
+        start_time = None
 
         while True:
             ret, frame = cap.read()
@@ -74,14 +66,22 @@ class FaceRecognition:
                     y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
                     indice = comparacion.index(True)
 
-                    if self.comp1 == indice:
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (self.colors[[indice],[0]],self.colors[[indice],[1]],self.colors[[indice],[2]]), 2)
-                        cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (self.colors[[indice],[0]],self.colors[[indice],[1]],self.colors[[indice],[2]]), cv2.FILLED)
-                        cv2.putText(frame, nombre, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1,
-                                    (255, 255, 255), 2)
-                        self.horario(nombre)
+                    if self.comp1 != indice:
+                        self.comp1 = indice
+                        start_time = datetime.now()
 
-            cv2.imshow('frame', frame)
+                    if self.comp1 == indice:
+                        elapsed_time = datetime.now() - start_time
+                        if elapsed_time.total_seconds() >= 2:
+                            cv2.rectangle(frame, (x1, y1), (x2, y2), (117, 243, 214), 2)
+                            cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (117, 243, 214), cv2.FILLED)
+                            cv2.putText(frame, nombre, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                            self.horario(nombre)
+                            return nombre
+
+            cv2.namedWindow('Reconocimiento', cv2.WINDOW_NORMAL)
+            cv2.setWindowProperty('Reconocimiento', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+            cv2.imshow('Reconocimiento', frame)
             t = cv2.waitKey(30)
             if t == 27:
                 break

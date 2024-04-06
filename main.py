@@ -2,7 +2,7 @@ import tkinter as tk
 import entrenamientoRF
 import capturaRostros
 from tkinter import filedialog
-import reconocimientoFacial
+from metodo2 import FaceRecognition
 
 
 class App:
