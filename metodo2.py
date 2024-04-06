@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import face_recognition as fr
 from datetime import datetime
-import random as rng
+import json
 
 class FaceRecognition:
     def __init__(self, path):
@@ -27,20 +27,22 @@ class FaceRecognition:
             encodings.append(encode)
         return encodings
 
-    def horario(self, nombre):
-        with open('Horario.csv', 'r+') as h:
-            data = h.readlines()
-            nombres = []
-            for line in data:
-                entry = line.split(',')
-                nombres.append(entry[0])
-
-            if nombre not in nombres:
-                info = datetime.now()
-                fecha = info.strftime('%Y-%m-%d')
-                hora = info.strftime('%H:%M:%S')
-                h.writelines(f'\n{nombre},{fecha},{hora}')
-                print(info)
+    def horario(self, nombre: str):
+        with open('Horario.json', 'a+') as h:
+            h.seek(0)
+            data = h.read()
+            if len(data) == 0:
+                data = []
+            else:
+                data = json.loads(data)
+            info = datetime.now()
+            fecha = info.strftime('%Y-%m-%d')
+            hora = info.strftime('%H:%M:%S')
+            new_entry = {'nombre': nombre, 'fecha': fecha, 'hora': hora}
+            data.append(new_entry)
+            h.seek(0)
+            h.truncate()
+            json.dump(data, h, indent=4)
 
     def run(self):
         self.load_images()
@@ -86,8 +88,6 @@ class FaceRecognition:
             if t == 27:
                 break
 
-face_recognition = FaceRecognition('./data2')
-face_recognition.run()
 
-
-
+frc = FaceRecognition('./data2')
+frc.horario('Juan')
