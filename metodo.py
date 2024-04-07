@@ -27,7 +27,7 @@ class FaceRecognition:
             encodings.append(encode)
         return encodings
 
-    def horario(self, nombre: str):
+    def horario(self, nombre: str, datetime):
         with open('Horario.json', 'a+') as h:
             h.seek(0)
             data = h.read()
@@ -35,9 +35,8 @@ class FaceRecognition:
                 data = []
             else:
                 data = json.loads(data)
-            info = datetime.now()
-            fecha = info.strftime('%Y-%m-%d')
-            hora = info.strftime('%H:%M:%S')
+            fecha = datetime.strftime('%Y-%m-%d')
+            hora = datetime.strftime('%H:%M:%S')
             new_entry = {'nombre': nombre, 'fecha': fecha, 'hora': hora}
             data.append(new_entry)
             h.seek(0)
@@ -74,12 +73,12 @@ class FaceRecognition:
 
                     if self.comp1 == indice:
                         elapsed_time = datetime.now() - start_time
+                        cv2.rectangle(frame, (x1, y1), (x2, y2), (117, 243, 214), 2)
+                        cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (117, 243, 214), cv2.FILLED)
+                        cv2.putText(frame, nombre, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
                         if elapsed_time.total_seconds() >= 2:
-                            cv2.rectangle(frame, (x1, y1), (x2, y2), (117, 243, 214), 2)
-                            cv2.rectangle(frame, (x1, y2 - 35), (x2, y2), (117, 243, 214), cv2.FILLED)
-                            cv2.putText(frame, nombre, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                            self.horario(nombre)
-                            return nombre
+                            cv2.destroyAllWindows()
+                            return nombre, datetime.now()
 
             cv2.namedWindow('Reconocimiento', cv2.WINDOW_NORMAL)
             cv2.setWindowProperty('Reconocimiento', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -88,6 +87,3 @@ class FaceRecognition:
             if t == 27:
                 break
 
-
-frc = FaceRecognition('./data2')
-frc.horario('Juan')

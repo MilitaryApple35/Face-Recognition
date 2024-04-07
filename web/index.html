@@ -1,26 +1,83 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Menú con Bootstrap</title>
-    <link rel="stylesheet" href="./bootstrap/bootstrap.css">
-</head>
-<body>
+    <head>
+        <title>Menú con Bootstrap</title>
+        <link rel="icon" href="./icons/scrumboyslogo.ico">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="./bootstrap/bootstrap.css">
+    </head>
+    <body style="height: 100vh;">
+        <div id="loading-screen" class="position-fixed bg-dark-subtle" style="display: none; height: 100vh; width: 100vw">
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 100vh; width: 100vw">
+                <div class="spinner-border text-primary" role="status">
+                </div>
+                <span class="d-block">Loading...</span>
+            </div>
+        </div>
+    
+        <div id="confirmation-screen" class="position-fixed bg-dark-subtle" style="display: none; height: 100vh; width: 100vw">
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 100vh; width: 100vw">
+                <h1 id="list-name"></h1>
+                <p>Ha entrado el dia:</p>
+                <p id="date"></p><br>
+                <p>A la hora:</p>
+                <p id="time"></p><br>
+                <p>¿Desea confirmar?</p><br>
+                <button type="button" class="btn btn-primary" onclick="confirmation()">Confirm</button>
+                <button type="button" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
 
-<div class="container-fluid d-flex flex-column">
-    <img src="../scrumboyslogo.png" alt="" class="rounded mx-auto d-block mb-5 mt-3">
-    <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4" onclick="pasar_lista()">Pase de lista</button>
-    <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4">Lista</button>
-    <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4">Agregar rostro</button>
-</div>
+        <div id="table-screen" class="position-fixed bg-dark-subtle" style="display: none; height: 100vh; width: 100vw">
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 100vh; width: 100vw">
+                <h1>Horario Entries</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="hide_table()">Close</button>
+            </div>
+        </div>
 
-<div class="container d-flex flex-column mt-5" style="width: fit-content;">
-    <button type="button" class="btn btn-outline-danger fw-bold px-4">Salir</button>
-</div>
+        <div id="camera-screen" class="position-fixed bg-dark-subtle" style="display: none; height: 100vh; width: 100vw">
+            <div class="d-flex justify-content-center align-items-center flex-column" style="height: 100vh; width: 100vw">
+                <video id="video" width="640" height="480" class="mt-5" autoplay></video>
+                <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+                <div class="input-group m-2 w-25">
+                    <span class="input-group-text">Nombre</span>
+                    <input id="input-nombre" type="text" aria-label="Nombre" class="form-control">
+                </div>
+                <button id="snap" type="button" class="btn btn-outline-primary m-2">Tomar foto</button>
+                <button type="button" class="btn btn-outline-danger mt-5">Cancelar</button>
+            </div>
+        </div>
 
-<script src="./jquery/jquery.js"></script>
-<script src="./bootstrap/bootstrap.js"></script>
-<script src="/eel.js"></script>
-<script src="./script.js"></script>
 
-</body>
+        <div id="main-screen" class="container-fluid d-flex flex-column align-items-center justify-content-center w-100 h-100 ">
+            <img src="./icons/scrumboyslogo.png" alt="" class="rounded mx-auto d-block mb-5 mt-3">
+            <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4 w-50" onclick="pasar_lista()">Pase de lista</button>
+            <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4 w-50"onclick="cargar_lista()">Lista</button>
+            <button type="button" class="btn btn-outline-primary fw-bold rounded mb-4 w-50" onclick="take_photo()">Agregar rostro</button>
+            <div class="container d-flex flex-column mt-5" style="width: fit-content;">
+                <button type="button" class="btn btn-outline-danger fw-bold px-4" onclick="salir()">Salir</button>
+            </div>
+        </div>
+
+
+        <script src="./jquery/jquery.js"></script>
+        <script src="./bootstrap/bootstrap.js"></script>
+        <script src="./eel.js"></script>
+        <script src="./script.js"></script>
+
+    </body>
 </html>
