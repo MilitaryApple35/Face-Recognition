@@ -1,4 +1,7 @@
-Descarga el rar de videos desde links.txt para tener ejemplos de videos
+Corre los siguientes comandos:
+
+    cd ruta/a/tu/proyecto
+    pip install -r requirements.txt
 
 Como correr:
 
